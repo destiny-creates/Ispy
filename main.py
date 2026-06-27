@@ -44,9 +44,9 @@ IIIIIIIIII SSSSSSSSSSSSSSS   PPPPPPPPPP              YYYYYYYYYYYYY
 def main():
     os.system('clear')
     print(banner)
-    target = input('Target URL: ')
+    target = input('\n[+] Target URL: ')
     try:
-        nmap.processtopports(target)
+        nmap.nmapdns(target)
     except TypeError as e:
         print(e)
 main()

@@ -2,22 +2,32 @@
 
 import nmap3
 import requests
-from discord_webhook import DiscordWebhook
+from discord_webhook import DiscordWebhook, DiscordEmbed
+import datetime
+from colorama import Fore
 
 #Variables
 nmap = nmap3.Nmap()
-webhookurl = 'REDACTED'
+webhookurl = 'REDACT'
+embed = DiscordEmbed(title="ISPY TOOL", description=f"SCAN RESULT: {datetime.datetime.now()}", color="03b2f8")
+global hostname, IPaddress, separation
 
 #Functions
 
 def nmapdns(target):
+    print(Fore.GREEN + '[+] Running NMAP DNS scan\n')
     dns_results = nmap.nmap_dns_brute_script(target)
+    print(Fore.GREEN + '[+] Sorting NMAP DNS scan\n')
     for item in dns_results:
-        print('[+] Hostname: ' + item['hostname'])
-        print('[+] IP Address: ' + item['address'] + '\n')
-        print('-----------------------')
-    webhook = DiscordWebhook(url=webhookurl, content=f'''[+] Hostname: ' + item['hostname']''')
-    webhook.execute()
+        hostname = ('[+] Hostname: ' + item['hostname'])
+        print(hostname)
+        IPaddress = ('[+] IP Address: ' + item['address'] + '\n')
+        print(IPaddress)
+        separation = ('-----------------------')
+        print(Fore.GREEN + f'[+] Sending NMAP DNS scan over webhook: {webhookurl}\n')
+        webhook = DiscordWebhook(url=webhookurl, content=hostname + IPaddress + separation)
+        webhook.add_embed(embed)
+        webhook.execute()
 
 def nmapversion(target):
     version_results = nmap.nmap_version_detection(target)
