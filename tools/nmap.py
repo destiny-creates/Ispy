@@ -1,66 +1,83 @@
 #Imports
 
 import nmap3
-import requests
 from discord_webhook import DiscordWebhook, DiscordEmbed
 import datetime
 from colorama import Fore
 
 #Variables
+webhookurl = 'REDACTED'
 nmap = nmap3.Nmap()
-webhookurl = 'REDACT'
-embed = DiscordEmbed(title="ISPY TOOL", description=f"SCAN RESULT: {datetime.datetime.now()}", color="03b2f8")
-global hostname, IPaddress, separation
+webhook = DiscordWebhook(url=webhookurl)
 
 #Functions
 
-def nmapdns(target):
-    print(Fore.GREEN + '[+] Running NMAP DNS scan\n')
-    dns_results = nmap.nmap_dns_brute_script(target)
-    print(Fore.GREEN + '[+] Sorting NMAP DNS scan\n')
-    for item in dns_results:
-        hostname = ('[+] Hostname: ' + item['hostname'])
-        print(hostname)
-        IPaddress = ('[+] IP Address: ' + item['address'] + '\n')
-        print(IPaddress)
-        separation = ('-----------------------')
-        print(Fore.GREEN + f'[+] Sending NMAP DNS scan over webhook: {webhookurl}\n')
-        webhook = DiscordWebhook(url=webhookurl, content=hostname + IPaddress + separation)
-        webhook.add_embed(embed)
-        webhook.execute()
+# This definition takes too long to scan, looking into why, so temporarily commented out.
+# def nmapdns(target):
+#     print(Fore.GREEN + '[+] Running NMAP DNS scan\n')
+#     dns_results = nmap.nmap_dns_brute_script(target)
+#     results = ''
+#     separator = '-----------------------\n'
+#     webhook = DiscordWebhook(url=webhookurl)
+#     for item in dns_results:
+#         hostname = '[+] Hostname: ' + item['hostname']
+#         IPaddress = '[+] IP Address: ' + item['address'] + '\n'
+#         results += hostname + IPaddress
+#     results += separator
+#     print(results)
+#     print(f'[+] Sending scan over {webhookurl}')
+#     embed = DiscordEmbed(title=f'[+] SCAN RESULT: {datetime.datetime.now()}\n[+] Target: {target}',
+#                          description='[+] NMAP DNS module' + f'\n{results}', color="03b2f8")
+#     webhook.add_embed(embed)
+#     webhook.execute()
+#     print('[+] Report sent')
 
 def nmapversion(target):
+    print(Fore.GREEN + '[+] Running NMAP version scan\n')
     version_results = nmap.nmap_version_detection(target)
     ip_address = next(iter(version_results))
     version = version_results[ip_address]
+    results = ''
+    separator = '-----------------------\n'
+    webhook = DiscordWebhook(url=webhookurl)
     for port in version['ports']:
-        print('[+] Protocol: ' + port['protocol'])
-        print('[+] Port: ' + port['portid'])
-        print('[+] State: ' + port['state'])
-        print('[+] Name: ' + port['service']['name'])
-        print('-----------------------')
+        if not port['state'] == 'open':
+            pass
+        else:
+            versionprotocol = '[+] Protocol: ' + port['protocol']
+            versionport = ' Port: ' + port['portid']
+            versionstate = ' State: ' + port['state']
+            versionname = ' Name: ' + port['service']['name']
+            results += versionprotocol + versionport + versionstate + versionname + '\n'
+    print(results)
+    print(f'[+] Sending scan over {webhookurl}')
+    embed = DiscordEmbed(title=f'[+] SCAN RESULT: {datetime.datetime.now()}\n[+] Target: {target}',
+                         description='[+] NMAP version module' + f'\n{results}', color="03b2f8")
+    webhook.add_embed(embed)
+    webhook.execute()
+    print(f'[+] Report sent' + f'\n{separator}')
 
 
 def nmaptopports(target):
+    print(Fore.GREEN + '[+] Running NMAP top ports scan\n')
     top_ports = nmap.scan_top_ports(target)
     ports_results = next(iter(top_ports))
     port = top_ports[ports_results]
+    results = ''
+    separator = '-----------------------\n'
+    webhook = DiscordWebhook(url=webhookurl)
     for port in port['ports']:
-        print('[+] Port: ' + port['portid'])
-        print('[+] Protocol: ' + port['protocol'])
-        print('[+] State: ' + port['state'])
-        print('[+] Service: ' + port['service']['name'])
-        print('-----------------------')
-
-
-def nmapos(target):
-    os_results = nmap.nmap_os_detection(target)
-    ip_address = next(iter(os_results))
-    os_version = os_results[ip_address]
-    for item in os_version['osmatch']:
-        print('[+] OS: ' + item['name'])
-        print('[+] Family: ' + item['osclass']['osfamily'])
-        print('[+] Type: ' + item['osclass']['type'])
-        print('[+] Generation: ' + item['osclass']['osgen'])
-        print('[+] Accuracy: ' + item['accuracy'])
-        print('-----------------------')
+        if not port['state'] == 'open':
+            pass
+        else:
+            portnum = '[+] Port: ' + port['portid']
+            portprotocol = ' Protocol: ' + port['protocol']
+            portstate = ' State: ' + port['state']
+            portservice = ' Service: ' + port['service']['name']
+            results += portnum + portprotocol + portstate + portservice +'\n'
+    print(results)
+    print(f'[+] Sending scan over {webhookurl}')
+    embed = DiscordEmbed(title=f'[+] SCAN RESULT: {datetime.datetime.now()}\n[+] Target: {target}', description='[+] NMAP top ports module' + f'\n{results}', color="03b2f8")
+    webhook.add_embed(embed)
+    webhook.execute()
+    print(f'[+] Report sent' + f'\n{separator}')

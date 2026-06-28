@@ -46,7 +46,11 @@ def main():
     print(banner)
     target = input('\n[+] Target URL: ')
     try:
-        nmap.nmapdns(target)
-    except TypeError as e:
-        print(e)
+        nmap.nmaptopports(target)
+        print('\n')
+        nmap.nmapversion(target)
+        print('\n[+] Scans completed')
+        exit()
+    except:
+        exit()
 main()
