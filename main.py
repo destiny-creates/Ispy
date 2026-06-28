@@ -1,14 +1,10 @@
 # Imports
 
 import os
-import time
 import datetime
-from logging import exception
-from discord_webhook import DiscordWebhook
-import requests
 from colorama import Fore
 from tools import nmap
-import subprocess
+from tools import nuclei
 
 #Variables
 
@@ -49,6 +45,8 @@ def main():
         nmap.nmaptopports(target)
         print('\n')
         nmap.nmapversion(target)
+        print('\n')
+        nuclei.nucleiscan(target)
         print('\n[+] Scans completed')
         exit()
     except:
