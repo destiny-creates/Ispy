@@ -5,6 +5,8 @@ import datetime
 from colorama import Fore
 from tools import nmap
 from tools import nuclei
+from tools import whois
+from tools import setup
 
 #Variables
 
@@ -37,18 +39,30 @@ IIIIIIIIII SSSSSSSSSSSSSSS   PPPPPPPPPP              YYYYYYYYYYYYY
                                                                       {time}\n''')
 #Functions
 
+def setupcheck():
+    print(banner)
+    if os.path.exists('settings.ini'):
+        main()
+    else:
+        print(Fore.GREEN + '[!] settings.ini does not exist. Running setup...')
+        setup.setup()
+        main()
+
 def main():
     os.system('clear')
     print(banner)
     target = input('\n[+] Target URL: ')
     try:
-        nmap.nmaptopports(target)
+        whois.whoisscan(target)
         print('\n')
         nmap.nmapversion(target)
+        print('\n')
+        nmap.nmaptopports(target)
         print('\n')
         nuclei.nucleiscan(target)
         print('\n[+] Scans completed')
         exit()
-    except:
-        exit()
-main()
+    except Exception as e:
+        print(e)
+
+setupcheck()
