@@ -1,0 +1,13 @@
+.idea/modules.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/misc.xml
+.idea/sf_Ispy_1.iml
+.idea/vcs.xml
+.venv/pyvenv.cfg
+settings.ini
+tools/__pycache__/__init__.cpython-313.pyc
+tools/__pycache__/nmap.cpython-313.pyc
+tools/__pycache__/nuclei.cpython-313.pyc
+tools/__pycache__/setup.cpython-313.pyc
+tools/__pycache__/whois.cpython-313.pyc
