@@ -3,10 +3,7 @@
 import os
 import datetime
 from colorama import Fore
-from tools import nmap
-from tools import nuclei
-from tools import whois
-from tools import setup
+from tools import nmap, whois, setup, nuclei
 
 #Variables
 
