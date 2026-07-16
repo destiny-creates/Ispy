@@ -19,6 +19,7 @@ python3 main.py
 - NMAP
 - Nuclei
 - Webhook reporting (discord)
+- Tor routing VIA proxychains
 
 ## Contributing
 
