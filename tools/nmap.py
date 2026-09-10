@@ -9,9 +9,9 @@ from configparser import ConfigParser
 #Variables
 nmap = nmap3.Nmap()
 config = ConfigParser()
-config.read('../settings.ini')
-nmap_webhookurl = (config.get('SETTINGS','nmap_webhook'))
-webhook = DiscordWebhook(url=nmap_webhookurl)
+config.read('config_files/settings.ini')
+nmap_webhook = config.get("SETTINGS", 'NMAP_webhook')
+webhook = DiscordWebhook(url=nmap_webhook)
 
 #Functions
 
@@ -20,14 +20,14 @@ def nmapdns(target):
     dns_results = nmap.nmap_dns_brute_script(target)
     results = ''
     separator = '-----------------------\n'
-    webhook = DiscordWebhook(url=nuclei_webhook)
+    webhook = DiscordWebhook(url=nmap_webhook)
     for item in dns_results:
         hostname = '[+] Hostname: ' + item['hostname']
         IPaddress = '[+] IP Address: ' + item['address'] + '\n'
         results += hostname + IPaddress
     results += separator
     print(results)
-    print(f'[+] Sending scan over {nuclei_webhook}')
+    print(f'[+] Sending scan over {nmap_webhook}')
     embed = DiscordEmbed(title=f'[+] SCAN RESULT: {datetime.datetime.now()}\n[+] Target: {target}',
                          description='[+] NMAP DNS module' + f'\n{results}', color="03b2f8")
     webhook.add_embed(embed)
@@ -51,7 +51,7 @@ def nmapversion(target):
             versionname = ' Name: ' + port['service']['name']
             results += versionprotocol + versionport + versionstate + versionname + '\n'
     print(results)
-    print(f'[+] Sending scan over {nmap_webhookurl}')
+    print(f'[+] Sending scan over {nmap_webhook}')
     embed = DiscordEmbed(title=f'[+] SCAN RESULT: {datetime.datetime.now()}\n[+] Target: {target}',
                          description='[+] NMAP version module' + f'\n{results}', color="03b2f8")
     webhook.add_embed(embed)
@@ -76,7 +76,7 @@ def nmaptopports(target):
             portservice = ' Service: ' + port['service']['name']
             results += portnum + portprotocol + portstate + portservice +'\n'
     print(results)
-    print(f'[+] Sending scan over {nmap_webhookurl}')
+    print(f'[+] Sending scan over {nmap_webhook}')
     embed = DiscordEmbed(title=f'[+] SCAN RESULT: {datetime.datetime.now()}\n[+] Target: {target}', description='[+] NMAP top ports module' + f'\n{results}', color="03b2f8")
     webhook.add_embed(embed)
     webhook.execute()

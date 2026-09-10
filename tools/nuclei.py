@@ -11,8 +11,8 @@ from configparser import ConfigParser
 # Variables
 
 config = ConfigParser()
-config.read('../settings.ini')
-nuclei_webhookurl = (config.get('SETTINGS','nuclei_webhook'))
+config.read('config_files/settings.ini')
+nuclei_webhookurl = (config.get('SETTINGS','Nuclei_webhook'))
 webhook = DiscordWebhook(url=nuclei_webhookurl)
 
 
