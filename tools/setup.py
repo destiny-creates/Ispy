@@ -4,10 +4,11 @@ from configparser import ConfigParser
 config = ConfigParser()
 
 def setup():
-    whois = input(Fore.GREEN + '[+] Whois Discord webhook URL: ')
-    NMAP = input(Fore.GREEN + '[+] NMAP Discord webhook URL: ')
-    Nuclei = input(Fore.GREEN + '[+] Nuclei Discord webhook URL: ')
-    config_file = '../config_files/settings.ini'
+
+    whois = config.get("SETTINGS","WHOIS_webhook")
+    NMAP = config.get("SETTINGS","NMAP_webhook")
+    Nuclei = config.get("SETTINGS","Nuclei_webhook")
+    config_file = 'config_files/settings.ini'
     if os.path.exists(config_file):
         with open(config_file, 'w') as f:
             config.add_section('SETTINGS')
@@ -21,6 +22,7 @@ def setup():
 
             config.set('SETTINGS','Nuclei_webhook',Nuclei)
             f.writelines(f'Nuclei_webhook = "{Nuclei}"\n')
+
             f.close()
             return config.items('SETTINGS')
     else:
@@ -31,10 +33,7 @@ def setup():
             config_file.format(settings_file)
             print(settings_file)
             return settings_file
-    with open(config_file, 'w') as file:
-         print(config)
-         file.write(config)
-         return config
+        return None
 
 if __name__ == "__main__":
     setup()

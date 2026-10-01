@@ -4,6 +4,8 @@ import os
 import datetime
 import logging
 import sys
+import multiprocessing.dummy as multiprocessing
+
 
 from colorama import Fore
 from tools import nmap, whois, setup, nuclei
