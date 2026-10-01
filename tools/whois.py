@@ -2,6 +2,8 @@
 # Imports
 
 import os
+import subprocess
+
 from colorama import Fore
 from discord_webhook import DiscordWebhook
 from discord_webhook import DiscordEmbed
@@ -18,7 +20,8 @@ webhook = DiscordWebhook(url=whois_webhook)
 def whoisscan(target):
     separator = '-----------------------\n'
     print(Fore.GREEN + f"[+] Running WHOIS scan against: {target}...\n")
-    os.system(f'''proxychains4 whois {target} > whois.txt''')
+    whois_command = f'proxychains4 whois {target} > whois.txt'
+    subprocess.run(whois_command, shell=True)
     print(f'[+] Sending scan over {whois_webhook}')
     with open('whois.txt', 'r') as file:
         results = file.read()

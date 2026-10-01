@@ -10,7 +10,7 @@ from configparser import ConfigParser
 nmap = nmap3.Nmap()
 config = ConfigParser()
 config.read('config_files/settings.ini')
-nmap_webhook = config.get("SETTINGS", 'NMAP_webhook')
+nmap_webhook = config.get('SETTINGS', 'NMAP_webhook')
 webhook = DiscordWebhook(url=nmap_webhook)
 
 #Functions
@@ -36,13 +36,13 @@ def nmapdns(target):
 
 def nmapversion(target):
     print(Fore.GREEN + '[+] Running NMAP version scan\n')
-    version_results = nmap.nmap_version_detection(target)
+    version_results = nmap.nmap_version_detection(target, '-sV' ,'-T4 -Pn -v')
     ip_address = next(iter(version_results))
     version = version_results[ip_address]
     results = ''
     separator = '-----------------------\n'
     for port in version['ports']:
-        if not port['state'] == 'open':
+        if not port['state'] == 'open'or not port['state'] == 'open|filtered':
             pass
         else:
             versionprotocol = '[+] Protocol: ' + port['protocol']
@@ -53,7 +53,7 @@ def nmapversion(target):
     print(results)
     print(f'[+] Sending scan over {nmap_webhook}')
     embed = DiscordEmbed(title=f'[+] SCAN RESULT: {datetime.datetime.now()}\n[+] Target: {target}',
-                         description='[+] NMAP version module' + f'\n{results}', color="03b2f8")
+                         description= f'[+] NMAP version module\n{results}', color="03b2f8")
     webhook.add_embed(embed)
     webhook.execute()
     print(f'[+] Report sent' + f'\n{separator}')

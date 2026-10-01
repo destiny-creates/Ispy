@@ -3,3 +3,4 @@ python3-nmap==1.9.1
 simplejson==4.1.1
 
 discord-webhook
+nuclei
