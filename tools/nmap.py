@@ -52,7 +52,7 @@ def nmapversion(target):
             results += versionprotocol + versionport + versionstate + versionname + '\n'
     print(results)
     print(f'[+] Sending scan over {nmap_webhook}')
-    embed = DiscordEmbed(title=f'[+] SCAN RESULT: {datetime.datetime.now()}\n[+] Target: {target}',
+    embed = DiscordEmbed(title=f'[+] SCAN RESULT: {datetime.datetime.now()}\n({target})',
                          description= f'[+] NMAP version module\n{results}', color="03b2f8")
     webhook.add_embed(embed)
     webhook.execute()
